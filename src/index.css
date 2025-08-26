@@ -1,3 +1,14 @@
+/* src/index.css */
+
+/* Definisikan variabel warna global */
+:root {
+  --color-primary: #FF7F50;
+  --color-primary-light: #FFA07A;
+  --color-secondary: #4A5568;
+  --color-neutral: #F7FAFC;
+}
+
+/* Reset dasar dan gaya font global */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +16,5 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  background-color: var(--color-neutral); /* Pastikan ini dari variabel */
 }

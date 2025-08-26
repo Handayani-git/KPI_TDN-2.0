@@ -1,0 +1,89 @@
+.sidebar {
+  width: 260px;
+  background-color: #111827; /* Warna gelap untuk sidebar */
+  color: #d1d5db;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidebarHeader {
+  padding: 1.5rem;
+  border-bottom: 1px solid #374151;
+}
+
+.logo {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.nav a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  color: #d1d5db;
+  border-radius: 6px;
+  margin: 0.25rem 1rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.nav a:hover {
+  background-color: #374151;
+  color: white;
+}
+
+/* Style untuk link yang sedang aktif */
+.nav a.active {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+}
+
+.sidebarFooter {
+  padding: 1.5rem;
+  border-top: 1px solid #374151;
+}
+
+.userInfo {
+  margin-bottom: 1rem;
+}
+
+.userName {
+  display: block;
+  font-weight: 600;
+  color: white;
+}
+
+.userRole {
+  display: block;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-transform: capitalize;
+}
+
+.logoutButton {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #374151;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background-color: var(--color-primary);
+}

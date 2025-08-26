@@ -1,0 +1,40 @@
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.title {
+  color: #6b7280;
+  font-weight: 500;
+  margin: 0;
+}
+
+.currentValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0.5rem 0;
+}
+
+.comparison {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.positive {
+  color: #16a34a; /* green-600 */
+  font-weight: 600;
+}
+
+.negative {
+  color: #dc2626; /* red-600 */
+  font-weight: 600;
+}
+
+.period {
+  color: #6b7280;
+}

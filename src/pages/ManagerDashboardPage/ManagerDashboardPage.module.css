@@ -1,0 +1,102 @@
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.headerTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.button:hover {
+  background-color: #f3f4f6;
+}
+
+.activeButton {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .cardGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* --- STYLE UNTUK GRAFIK --- */
+.chartSection {
+  margin-top: 2.5rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  height: 400px;
+  position: relative;
+}
+
+.tableSection {
+  margin-top: 2.5rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.tableTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.subTableTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  margin-bottom: 1rem;
+}
+
+.dateSubtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}

@@ -1,0 +1,95 @@
+{
+  "advertisers": [
+    { "id": "adv01", "name": "Adv.Jundi" },
+    { "id": "adv02", "name": "Adv.Cipa" },
+    { "id": "adv03", "name": "Adv.Padilah" },
+    { "id": "adv04", "name": "Adv.Rizal" }
+  ],
+  "customerServices": [
+    { "id": "cs01", "name": "Cs Salma" },
+    { "id": "cs02", "name": "Cs Rafika" }
+  ],
+  "brands": [
+    { "sku": "VML01", "name": "Vitameal", "store": "Toko Vitameal" },
+    { "sku": "VMLS01", "name": "Vitameal Less Sugar", "store": "Toko Vitameal" },
+    { "sku": "EYB01", "name": "Eyebost", "store": "Toko Eyebost" }
+  ],
+  "platforms": [
+    { "id": "plt01", "name": "Meta" },
+    { "id": "plt02", "name": "Meta Interaksi WA" }
+  ],
+  "dailyPerformance": [
+    {
+      "date": "2025-06-01",
+      "advertiserId": "adv01",
+      "csId": "cs01",
+      "brandSku": "VML01",
+      "platformId": "plt01",
+      "spend": 117144,
+      "leads": 4,
+      "closing": 3,
+      "quantity": 6,
+      "omset": 1000000
+    },
+    {
+      "date": "2025-06-02",
+      "advertiserId": "adv01",
+      "csId": "cs01",
+      "brandSku": "VML01",
+      "platformId": "plt01",
+      "spend": 425478,
+      "leads": 3,
+      "closing": 3,
+      "quantity": 6,
+      "omset": 1250000
+    },
+    {
+      "date": "2025-06-02",
+      "advertiserId": "adv01",
+      "csId": "cs01",
+      "brandSku": "VML01",
+      "platformId": "plt02",
+      "spend": 159040,
+      "leads": 8,
+      "closing": 7,
+      "quantity": 15,
+      "omset": 3500000
+    },
+    {
+      "date": "2025-06-03",
+      "advertiserId": "adv01",
+      "csId": "cs01",
+      "brandSku": "VML01",
+      "platformId": "plt01",
+      "spend": 383059,
+      "leads": 3,
+      "closing": 2,
+      "quantity": 4,
+      "omset": 850000
+    },
+    {
+      "date": "2025-07-07",
+      "advertiserId": "adv01",
+      "csId": "cs01",
+      "brandSku": "VML01",
+      "platformId": "plt01",
+      "spend": 250000,
+      "leads": 13,
+      "closing": 12,
+      "quantity": 25,
+      "omset": 5500000
+    },
+    {
+      "date": "2025-07-07",
+      "advertiserId": "adv02",
+      "csId": "cs01",
+      "brandSku": "VML01",
+      "platformId": "plt02",
+      "spend": 150000,
+      "leads": 3,
+      "closing": 3,
+      "quantity": 6,
+      "omset": 1200000
+    }
+  ]
+}

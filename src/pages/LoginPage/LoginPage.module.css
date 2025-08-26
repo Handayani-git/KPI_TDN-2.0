@@ -1,0 +1,92 @@
+/* src/pages/LoginPage/LoginPage.module.css */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f6f8;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 450px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #374151;
+  margin: 0;
+}
+
+.header p {
+  margin-top: 10px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.input {
+  box-sizing: border-box; /* Tambahan penting */
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid #e0e6ed;
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+  background-color: #f9fafb;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.25);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 14px 18px;
+  color: white;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  font-size: 1rem;
+}
+
+.submitButton:hover {
+  background-color: var(--color-primary-light);
+}
+
+.error {
+  padding: 12px;
+  font-size: 0.9rem;
+  color: #dc2626;
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
