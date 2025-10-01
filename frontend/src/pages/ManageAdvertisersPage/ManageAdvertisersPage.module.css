@@ -1,0 +1,100 @@
+/* --- Header Utama Halaman --- */
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.headerTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #374151; /* --color-secondary */
+}
+
+/* --- Tombol Tambah Baru --- */
+.addButton {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.addButton:hover {
+  background-color: var(--color-primary-light);
+}
+
+/* --- Kontainer Konten Utama (Tabel) --- */
+.content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* --- Styling Tabel --- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 1rem; /* Padding lebih besar */
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table th {
+  background-color: #f9fafb;
+  color: #6b7280;
+  font-size: 0.75rem; /* 12px */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table td {
+  color: #111827;
+  font-weight: 500;
+}
+
+/* --- Kontainer Tombol Aksi (Edit & Hapus) --- */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.editButton, .deleteButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.editButton:hover, .deleteButton:hover {
+  opacity: 0.85;
+}
+
+.editButton {
+  background-color: #3b82f6; /* Blue-500 */
+  color: white;
+}
+
+.deleteButton {
+  background-color: #ef4444; /* Red-500 */
+  color: white;
+}
