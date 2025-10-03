@@ -20,7 +20,9 @@ function AdvertiserDashboardPage() {
         setLoading(true);
         const startDate = isAllTime ? null : dateRange.startDate;
         const endDate = isAllTime ? null : dateRange.endDate;
+        console.log('Memanggil service dengan user.id:', user.id);
         const result = await getAdvertiserDashboardDataForPeriod(user.id, startDate, endDate);
+        console.log('Hasil dari service:', result);
         setData(result);
         setLoading(false);
       };
