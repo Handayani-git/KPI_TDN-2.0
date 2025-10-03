@@ -1,116 +1,91 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useData } from '../../contexts/DataContext';
 import styles from './CSReportPage.module.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { db } from '../../firebase';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
 function CSReportPage() {
   const { user } = useAuth();
-  const { advertisers, addDailyReport } = useData();
+  const [reportData, setReportData] = useState({
+    date: new Date().toISOString().split('T')[0],
+    omset: '',
+    closing: '',
+    quantity: '',
+  });
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const [date, setDate] = useState('');
-  const [advId, setAdvId] = useState('');
-  const [omset, setOmset] = useState('');
-  const [closing, setClosing] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [message, setMessage] = useState('');
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setReportData(prev => ({ ...prev, [name]: value }));
+  };
 
-  const handleReportSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setSuccessMessage('');
+    setErrorMessage('');
 
-    if (!date || !advId || !omset || !closing || !quantity) {
-      setMessage('Harap isi semua kolom!');
-      return;
+    if (!user || !user.id) {
+        setErrorMessage("Data pengguna tidak ditemukan. Silakan login ulang.");
+        setLoading(false);
+        return;
     }
 
-    const newReport = {
-      id: `cs-${Date.now()}`,
-      date: date,
-      advertiserId: advId,
-      csId: user.id,
-      omset: parseFloat(omset),
-      closing: parseInt(closing, 10),
-      quantity: parseInt(quantity, 10),
-      spend: 0,
-      leads: 0,
-    };
+    try {
+      await addDoc(collection(db, "dailyPerformance"), {
+        csId: user.id,
+        advertiserId: null,
+        date: Timestamp.fromDate(new Date(reportData.date)),
+        omset: Number(reportData.omset),
+        closing: Number(reportData.closing),
+        quantity: Number(reportData.quantity),
+        spend: 0,
+        leads: 0,
+      });
 
-    addDailyReport(newReport);
-    setMessage('Laporan berhasil dikirim!');
-
-    // Reset formulir
-    setDate('');
-    setAdvId('');
-    setOmset('');
-    setClosing('');
-    setQuantity('');
+      setSuccessMessage('Laporan berhasil dikirim!');
+      setReportData({ date: new Date().toISOString().split('T')[0], omset: '', closing: '', quantity: '' });
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      setErrorMessage("Gagal mengirim laporan. Silakan coba lagi.");
+    } finally {
+      setLoading(false);
+      setTimeout(() => { setSuccessMessage(''); setErrorMessage(''); }, 4000);
+    }
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Buat Laporan Penjualan Harian</h1>
-      <form onSubmit={handleReportSubmit} className={styles.form}>
-        <div className={styles.formGroup}>
-          <label htmlFor="date" className={styles.label}>Tanggal:</label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className={styles.input}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="advertiser" className={styles.label}>Nama Advertiser:</label>
-          <select
-            id="advertiser"
-            value={advId}
-            onChange={(e) => setAdvId(e.target.value)}
-            className={styles.select}
-            required
-          >
-            <option value="">Pilih Advertiser</option>
-            {advertisers.map(adv => (
-              <option key={adv.id} value={adv.id}>{adv.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="omset" className={styles.label}>Total Omset:</label>
-          <input
-            type="number"
-            id="omset"
-            value={omset}
-            onChange={(e) => setOmset(e.target.value)}
-            className={styles.input}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="closing" className={styles.label}>Jumlah Closing:</label>
-          <input
-            type="number"
-            id="closing"
-            value={closing}
-            onChange={(e) => setClosing(e.target.value)}
-            className={styles.input}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="quantity" className={styles.label}>Jumlah Produk Terjual (QTY):</label>
-          <input
-            type="number"
-            id="quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            className={styles.input}
-            required
-          />
-        </div>
-        <button type="submit" className={styles.button}>Kirim Laporan</button>
-      </form>
-      {message && <p className={styles.message}>{message}</p>}
+    <div>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.headerTitle}>Lapor Kinerja Penjualan Harian</h1>
+      </div>
+      <div className={styles.formContainer}>
+        {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+        {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <label htmlFor="date">Tanggal Laporan</label>
+            <input type="date" id="date" name="date" value={reportData.date} onChange={handleChange} required className={styles.input} disabled={loading} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="omset">Total Omset (Rp)</label>
+            <input type="number" id="omset" name="omset" value={reportData.omset} onChange={handleChange} placeholder="Contoh: 5000000" required className={styles.input} disabled={loading} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="closing">Jumlah Closing</label>
+            <input type="number" id="closing" name="closing" value={reportData.closing} onChange={handleChange} placeholder="Contoh: 10" required className={styles.input} disabled={loading} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="quantity">Jumlah Kuantitas Produk Terjual</label>
+            <input type="number" id="quantity" name="quantity" value={reportData.quantity} onChange={handleChange} placeholder="Contoh: 20" required className={styles.input} disabled={loading} />
+          </div>
+          <button type="submit" className={styles.submitButton} disabled={loading}>
+            {loading ? 'Mengirim...' : 'Kirim Laporan'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

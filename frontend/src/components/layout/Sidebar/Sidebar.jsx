@@ -32,6 +32,7 @@ function Sidebar() {
             {user?.role === 'cs' && (
               <>
                 <li><NavLink to="/my-performance" className={({ isActive }) => isActive ? styles.active : ''}>Kinerja Saya</NavLink></li>
+                <li><NavLink to="/report/leads" className={({ isActive }) => isActive ? styles.active : ''}>Lapor Leads</NavLink></li>
                 <li><NavLink to="/report/sales" className={({ isActive }) => isActive ? styles.active : ''}>Lapor Penjualan</NavLink></li>
               </>
             )}

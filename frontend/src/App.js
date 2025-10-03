@@ -11,6 +11,8 @@ import CSDashboardPage from './pages/CSDashboardPage/CSDashboardPage';
 import ManageAdvertisersPage from './pages/ManageAdvertisersPage/ManageAdvertisersPage';
 import ManageCSPage from './pages/ManageCSPage/ManageCSPage';
 import AdReportPage from './pages/AdReportPage/AdReportPage';
+import CSReportPage from './pages/CSReportPage/CSReportPage';
+import LeadsReportPage from './pages/LeadsReportPage/LeadsReportPage';
 import SalesReportPage from './pages/SalesReportPage/SalesReportPage';
 import AdvertiserDashboardPage from './pages/AdvertiserDashboardPage/AdvertiserDashboardPage';
 
@@ -31,6 +33,7 @@ function App() {
               <Route path="/manage-cs" element={<ManageCSPage />} />
               <Route path="/report/ads" element={<AdReportPage />} />
               <Route path="/report/sales" element={<SalesReportPage />} />
+              <Route path="/report/leads" element={<LeadsReportPage />} />
             </Route>
 
           </Routes>

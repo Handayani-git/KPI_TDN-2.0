@@ -52,7 +52,7 @@ function CSDashboardPage() {
   ], []);
 
   if (loading || !data) {
-    return <p>Loading data kinerja Anda...</p>;
+    return <p>Loading your performance data...</p>;
   }
 
   const formattedHistoryData = data.current.dailyHistory.map(row => ({

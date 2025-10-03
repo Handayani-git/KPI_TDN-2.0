@@ -29,8 +29,14 @@ const handleSubmit = async (event) => { // <-- Jadikan async
 };
 
    useEffect(() => {
-    if (user) {
-      navigate(user.role === 'manager' ? '/dashboard' : '/my-performance');
+    if (user?.role === 'manager') {
+      navigate( '/dashboard' );
+    }
+    else if (user?.role === 'cs') {
+      navigate('/my-performance');
+    }
+    else if (user?.role === 'adv') {
+      navigate('/adv-performance');
     }
   }, [user, navigate]);
 

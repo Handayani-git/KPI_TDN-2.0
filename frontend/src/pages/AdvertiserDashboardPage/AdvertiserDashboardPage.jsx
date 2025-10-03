@@ -20,9 +20,7 @@ function AdvertiserDashboardPage() {
         setLoading(true);
         const startDate = isAllTime ? null : dateRange.startDate;
         const endDate = isAllTime ? null : dateRange.endDate;
-        console.log('Memanggil service dengan user.id:', user.id);
         const result = await getAdvertiserDashboardDataForPeriod(user.id, startDate, endDate);
-        console.log('Hasil dari service:', result);
         setData(result);
         setLoading(false);
       };
@@ -55,7 +53,7 @@ function AdvertiserDashboardPage() {
   ], []);
 
   if (loading || !data) {
-    return <p>Memuat data kinerja iklan Anda...</p>;
+    return <p>Loading your ad performance data...</p>;
   }
 
   const formattedHistoryData = data.current.dailyHistory.map(row => ({
