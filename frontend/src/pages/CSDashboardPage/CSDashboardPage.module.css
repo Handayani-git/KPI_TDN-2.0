@@ -1,3 +1,4 @@
+/* --- Main Page Header --- */
 .pageHeader {
   display: flex;
   flex-wrap: wrap;
@@ -5,32 +6,37 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .headerTitle {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #374151;
+  color: #374151; /* Darker text for title */
 }
 
+/* --- Filter Container --- */
 .filterContainer {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.button {
-  padding: 0.5rem 1rem;
+.button, .selectFilter {
+  padding: 0.6rem 1rem;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 8px; /* Slightly more rounded */
   background-color: white;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s;
+  font-size: 0.875rem;
+  transition: all 0.2s ease-in-out;
 }
 
-.button:hover {
-  background-color: #f3f4f6;
+.button:hover, .selectFilter:hover {
+  border-color: #a1a1aa;
+  background-color: #f9fafb;
 }
 
 .activeButton {
@@ -39,50 +45,48 @@
   border-color: var(--color-primary);
 }
 
+.selectFilter {
+  min-width: 150px; /* Give the select box a minimum width */
+}
+
+/* --- KPI Card Grid --- */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* More responsive grid */
   gap: 1.5rem;
 }
 
-@media (min-width: 640px) {
-  .cardGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (min-width: 1024px) {
-  .cardGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
+/* --- Table Section --- */
 .tableSection {
   margin-top: 2.5rem;
   background-color: white;
-  padding: 1.5rem 2rem;
+  padding: 2rem;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); /* Softer shadow */
 }
 
 .tableHeader {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
 .tableTitle {
-  font-size: 1.25rem;
+  font-size: 1.5rem; /* Larger table title */
   font-weight: 600;
-  color: #374151;
+  color: #1f2937; /* Even darker text */
 }
 
 .dateSubtitle {
   font-size: 0.875rem;
   font-weight: 500;
   color: #4b5563;
-  background-color: #e5e7eb;
+  background-color: #f3f4f6; /* Slightly different badge color */
   padding: 0.35rem 0.75rem;
   border-radius: 9999px;
+  border: 1px solid #e5e7eb;
 }

@@ -3,30 +3,53 @@ import { collection, getDocs } from "firebase/firestore";
 import { differenceInDays, subDays, format } from 'date-fns';
 import { fetchDataFromCollection } from './utils';
 
-export const getDashboardDataForPeriod = async (startDate, endDate) => {
+//======================================================================
+//== FUNGSI UTAMA (EXPORTED)
+//======================================================================
+export const getDashboardDataForPeriod = async (startDate, endDate, selectedCS) => {
+  // 1. Ambil semua data master
   const advSnapshot = await getDocs(collection(db, "advertisers"));
   const advertisers = advSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
   const csSnapshot = await getDocs(collection(db, "customerServices"));
   const customerServices = csSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
   const masterData = { advertisers, customerServices };
 
-  const currentPeriodData = await processManagerData(startDate, endDate, masterData);
+  // 2. Proses data untuk periode saat ini
+  const currentPeriodData = await processManagerData(startDate, endDate, masterData, selectedCS);
+
+  // 3. Proses data untuk periode perbandingan
   let previousPeriodData = createEmptyData();
   if (startDate && endDate) {
     const durationInDays = differenceInDays(endDate, startDate);
     const previousPeriodStartDate = subDays(startDate, durationInDays + 1);
     const previousPeriodEndDate = subDays(endDate, durationInDays + 1);
-    previousPeriodData = await processManagerData(previousPeriodStartDate, previousPeriodEndDate, masterData);
+    previousPeriodData = await processManagerData(previousPeriodStartDate, previousPeriodEndDate, masterData, selectedCS);
   }
+
   return { current: currentPeriodData, previous: previousPeriodData };
 };
 
-async function processManagerData(startDate, endDate, masterData) {
+//======================================================================
+//== FUNGSI PEMROSESAN INTERNAL
+//======================================================================
+async function processManagerData(startDate, endDate, masterData, selectedCS) {
   const { advertisers, customerServices } = masterData;
-  const adSpends = await fetchDataFromCollection('adSpends', startDate, endDate);
-  const leads = await fetchDataFromCollection('leads', startDate, endDate);
-  const sales = await fetchDataFromCollection('sales', startDate, endDate);
+  
+  // Ambil semua data transaksi dari 3 koleksi berbeda
+  let adSpends = await fetchDataFromCollection('adSpends', startDate, endDate);
+  let leads = await fetchDataFromCollection('leads', startDate, endDate);
+  let sales = await fetchDataFromCollection('sales', startDate, endDate);
 
+  // Jika CS tertentu dipilih, filter data transaksi yang relevan
+  if (selectedCS && selectedCS !== 'all') {
+    leads = leads.filter(l => l.csId === selectedCS);
+    sales = sales.filter(s => s.csId === selectedCS);
+    // Ad spend tidak difilter berdasarkan CS karena sumbernya dari ADV
+  }
+
+  // --- AGREGASI KINERJA ADVERTISER ---
   const advertiserStats = {};
   advertisers.forEach(adv => {
       advertiserStats[adv.id] = { name: adv.name, grossOmset: 0, budgetAds: 0, closing: 0, quantity: 0, leads: 0 };
@@ -44,13 +67,14 @@ async function processManagerData(startDate, endDate, masterData) {
           advertiserStats[sale.advertiserId].closing += 1;
       }
   });
-  const advertiserPerformance = Object.entries(advertiserStats).map(([id, stats]) => {
+  const advertiserPerformance = Object.values(advertiserStats).map(stats => {
     const roas = stats.budgetAds > 0 ? (stats.grossOmset / stats.budgetAds).toFixed(2) : 0;
     const cac = stats.grossOmset > 0 ? ((stats.budgetAds / stats.grossOmset) * 100).toFixed(2) + '%' : '0.00%';
     const avgProducts = stats.closing > 0 ? (stats.quantity / stats.closing).toFixed(2) : 0;
-    return { id, ...stats, roas, cac, avgProducts };
+    return { ...stats, roas, cac, avgProducts };
   });
 
+  // --- AGREGASI KINERJA CS ---
   const csStats = {};
   customerServices.forEach(cs => {
       csStats[cs.id] = { name: cs.name, omset: 0, leads: 0, closing: 0, quantity: 0 };
@@ -65,12 +89,13 @@ async function processManagerData(startDate, endDate, masterData) {
           csStats[sale.csId].closing += 1;
       }
   });
-  const csPerformance = Object.entries(csStats).map(([id, stats]) => {
+  const csPerformance = Object.values(csStats).map(stats => {
       const closingRate = stats.leads > 0 ? ((stats.closing / stats.leads) * 100).toFixed(0) + '%' : '0%';
       const avgProducts = stats.closing > 0 ? (stats.quantity / stats.closing).toFixed(2) : 0;
-      return { id, ...stats, closingRate, avgProducts };
+      return { ...stats, closingRate, avgProducts };
   });
 
+  // --- RINGKASAN TOTAL (SUMMARY) ---
   const summary = advertiserPerformance.reduce((acc, curr) => {
     acc.grossOmset += curr.grossOmset;
     acc.budgetAds += curr.budgetAds;
@@ -79,19 +104,29 @@ async function processManagerData(startDate, endDate, masterData) {
   }, { grossOmset: 0, budgetAds: 0, totalClosing: 0 });
   summary.roas = summary.budgetAds > 0 ? (summary.grossOmset / summary.budgetAds).toFixed(2) : 0;
   
+  // --- PERSIAPAN DATA UNTUK GRAFIK & RINCIAN HARIAN ---
   const dailyTotals = {};
   const allTransactions = [...adSpends, ...leads, ...sales];
   allTransactions.forEach(item => {
       const dateKey = format(item.date, 'yyyy-MM-dd');
       if (!dailyTotals[dateKey]) {
-          dailyTotals[dateKey] = { date: item.date, spend: 0, leads: 0, omset: 0, closing: 0 };
+          dailyTotals[dateKey] = { date: item.date, spend: 0, leads: 0, omset: 0, closing: 0, advertiserId: null, csId: null };
       }
       dailyTotals[dateKey].spend += item.spend || 0;
       dailyTotals[dateKey].leads += item.leadCount || 0;
       dailyTotals[dateKey].omset += item.omset || 0;
       if (item.quantity) dailyTotals[dateKey].closing += 1;
+
+      if (item.advertiserId && !dailyTotals[dateKey].advertiserId) dailyTotals[dateKey].advertiserId = item.advertiserId;
+      if (item.sourceAdvertiserId && !dailyTotals[dateKey].advertiserId) dailyTotals[dateKey].advertiserId = item.sourceAdvertiserId;
+      if (item.csId && !dailyTotals[dateKey].csId) dailyTotals[dateKey].csId = item.csId;
   });
-  const dailyHistory = Object.values(dailyTotals);
+
+  const dailyHistory = Object.values(dailyTotals).map(day => {
+      const adv = advertisers.find(a => a.id === day.advertiserId);
+      const cs = customerServices.find(c => c.id === day.csId);
+      return { ...day, advertiserName: adv ? adv.name : '-', csName: cs ? cs.name : '-' };
+  });
 
   const timeSeriesData = {
     labels: [],
@@ -107,9 +142,18 @@ async function processManagerData(startDate, endDate, masterData) {
       timeSeriesData.datasets[1].data.push(dailyTotals[date].spend);
   });
   
-  return { summary, advertiserPerformance, csPerformance, dailyHistory, chartData: timeSeriesData };
+  return { 
+    summary, 
+    advertiserPerformance, 
+    csPerformance,
+    dailyHistory: dailyHistory.sort((a,b) => b.date - a.date),
+    chartData: timeSeriesData, 
+  };
 }
 
+//======================================================================
+//== FUNGSI HELPER UNTUK DATA KOSONG
+//======================================================================
 function createEmptyData() {
     return {
         summary: { grossOmset: 0, budgetAds: 0, totalClosing: 0, roas: 0 },

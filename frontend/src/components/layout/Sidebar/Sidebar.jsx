@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import styles from './Sidebar.module.css';
+import logo from '../../../images/logo.png';
 
 function Sidebar() {
   const { user, logout } = useAuth();
@@ -16,7 +17,10 @@ function Sidebar() {
     <aside className={styles.sidebar}>
       <div>
         <div className={styles.sidebarHeader}>
-          <h1 className={styles.logo}>KPI Dashboard</h1>
+          <div className={styles.logoContainer}>
+            <img src={logo} alt="Company Logo" className={styles.logo} />
+            <h1 className={styles.logoTitle}>KPI Dashboard</h1>
+          </div>
         </div>
         <nav className={styles.nav}>
           <ul>

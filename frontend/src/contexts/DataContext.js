@@ -9,58 +9,47 @@ export function DataProvider({ children }) {
   const [customerServices, setCustomerServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fungsi untuk memuat semua data master dari Firestore
   const fetchData = async () => {
     try {
       const advSnapshot = await getDocs(collection(db, "advertisers"));
       setAdvertisers(advSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-
       const csSnapshot = await getDocs(collection(db, "customerServices"));
       setCustomerServices(csSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     } catch (error) {
-      console.error("Gagal memuat data master:", error);
+      console.error("Failed to load master data:", error);
     }
   };
 
-  // Memuat data pertama kali saat aplikasi dibuka
   useEffect(() => {
     setLoading(true);
     fetchData().finally(() => setLoading(false));
   }, []);
 
-  // --- FUNGSI CRUD ADVERTISER DENGAN FIREBASE ---
-  const addAdvertiser = async (name) => {
-    await addDoc(collection(db, "advertisers"), { name });
-    await fetchData(); // Muat ulang data setelah menambah
-  };
-
-  const updateAdvertiser = async (id, updatedName) => {
-    const advDoc = doc(db, "advertisers", id);
-    await updateDoc(advDoc, { name: updatedName });
+  // --- ADVERTISER CRUD FUNCTIONS ---
+  const addAdvertiser = async (data) => {
+    await addDoc(collection(db, "advertisers"), data);
     await fetchData();
   };
-
+  const updateAdvertiser = async (id, data) => {
+    await updateDoc(doc(db, "advertisers", id), data);
+    await fetchData();
+  };
   const deleteAdvertiser = async (id) => {
-    const advDoc = doc(db, "advertisers", id);
-    await deleteDoc(advDoc);
+    await deleteDoc(doc(db, "advertisers", id));
     await fetchData();
   };
 
-  // --- FUNGSI CRUD CS DENGAN FIREBASE ---
-  const addCS = async (name) => {
-    await addDoc(collection(db, "customerServices"), { name });
+  // --- CS CRUD FUNCTIONS ---
+  const addCS = async (data) => {
+    await addDoc(collection(db, "customerServices"), data);
     await fetchData();
   };
-
-  const updateCS = async (id, updatedName) => {
-    const csDoc = doc(db, "customerServices", id);
-    await updateDoc(csDoc, { name: updatedName });
+  const updateCS = async (id, data) => {
+    await updateDoc(doc(db, "customerServices", id), data);
     await fetchData();
   };
-
   const deleteCS = async (id) => {
-    const csDoc = doc(db, "customerServices", id);
-    await deleteDoc(csDoc);
+    await deleteDoc(doc(db, "customerServices", id));
     await fetchData();
   };
 

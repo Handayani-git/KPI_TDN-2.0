@@ -1,4 +1,4 @@
-/* --- Header Utama Halaman --- */
+/* --- Main Page Header --- */
 .pageHeader {
   display: flex;
   flex-wrap: wrap;
@@ -13,10 +13,10 @@
 .headerTitle {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #374151; /* --color-secondary */
+  color: #374151;
 }
 
-/* --- Tombol Tambah Baru --- */
+/* --- "Add New" Button --- */
 .addButton {
   padding: 0.6rem 1.2rem;
   font-size: 0.9rem;
@@ -34,7 +34,7 @@
   background-color: var(--color-primary-light);
 }
 
-/* --- Kontainer Konten Utama (Tabel) --- */
+/* --- Main Content Container (Table) --- */
 .content {
   background-color: white;
   padding: 2rem;
@@ -43,7 +43,7 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-/* --- Styling Tabel --- */
+/* --- Table Styling --- */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -51,25 +51,45 @@
 
 .table th,
 .table td {
-  padding: 1rem; /* Padding lebih besar */
+  padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle; /* Ensures vertical alignment */
 }
 
 .table th {
   background-color: #f9fafb;
   color: #6b7280;
-  font-size: 0.75rem; /* 12px */
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.table td {
-  color: #111827;
-  font-weight: 500;
+/* --- User Cell with Avatar and Email --- */
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* --- Kontainer Tombol Aksi (Edit & Hapus) --- */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userName {
+  font-weight: 600;
+  color: #111827;
+}
+
+.userEmail {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* --- Action Buttons Container (Edit & Delete) --- */
 .actions {
   display: flex;
   gap: 0.75rem;
@@ -77,7 +97,7 @@
 
 .editButton, .deleteButton {
   padding: 0.5rem 1rem;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 500;
   border: none;
   border-radius: 6px;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { getAdvertiserDashboardDataForPeriod } from '../../services/kpiService';
+import { useData } from '../../contexts/DataContext';
+import { getAdvertiserDashboardDataForPeriod } from '../../services/advertiserService';
 
 import Card from '../../components/ui/Card/Card';
 import Table from '../../components/ui/Table/Table';
@@ -9,24 +10,27 @@ import styles from './AdvertiserDashboardPage.module.css';
 
 function AdvertiserDashboardPage() {
   const { user } = useAuth();
+  const { advertisers } = useData();
+  
   const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
   const [isAllTime, setIsAllTime] = useState(true);
+  const [selectedAdv, setSelectedAdv] = useState('all'); // State untuk filter ADV
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user && user.id) {
+    if (user) {
       const fetchData = async () => {
         setLoading(true);
         const startDate = isAllTime ? null : dateRange.startDate;
         const endDate = isAllTime ? null : dateRange.endDate;
-        const result = await getAdvertiserDashboardDataForPeriod(user.id, startDate, endDate);
+        const result = await getAdvertiserDashboardDataForPeriod(selectedAdv, startDate, endDate);
         setData(result);
         setLoading(false);
       };
       fetchData();
     }
-  }, [user, dateRange, isAllTime]);
+  }, [user, dateRange, isAllTime, selectedAdv]);
 
   const handleDateChange = (newDateRange) => {
     setDateRange(newDateRange);
@@ -53,7 +57,7 @@ function AdvertiserDashboardPage() {
   ], []);
 
   if (loading || !data) {
-    return <p>Loading your ad performance data...</p>;
+    return <p>Memuat data kinerja iklan Anda...</p>;
   }
 
   const formattedHistoryData = data.current.dailyHistory.map(row => ({
@@ -64,8 +68,19 @@ function AdvertiserDashboardPage() {
   return (
     <div>
       <div className={styles.pageHeader}>
-        <h1 className={styles.headerTitle}>Kinerja Iklan Anda</h1>
+        <h1 className={styles.headerTitle}>Kinerja Iklan</h1>
         <div className={styles.filterContainer}>
+          <select 
+            value={selectedAdv} 
+            onChange={(e) => setSelectedAdv(e.target.value)} 
+            className={styles.selectFilter}
+          >
+            <option value="all">Semua ADV</option>
+            {advertisers.map(adv => (
+              <option key={adv.id} value={adv.id}>{adv.name}</option>
+            ))}
+          </select>
+
           <button onClick={() => setIsAllTime(true)} className={`${styles.button} ${isAllTime ? styles.activeButton : ''}`}>
             Semua Waktu
           </button>

@@ -5,8 +5,6 @@ import styles from './ManageCSPage.module.css';
 
 function ManageCSPage() {
   const { customerServices, addCS, updateCS, deleteCS, loading } = useData();
-
-  // State untuk mengontrol form modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCS, setEditingCS] = useState(null);
 
@@ -22,14 +20,14 @@ function ManageCSPage() {
 
   const handleFormSubmit = (formData) => {
     if (editingCS) {
-      updateCS(editingCS.id, formData.name);
+      updateCS(editingCS.id, formData);
     } else {
-      addCS(formData.name);
+      addCS(formData);
     }
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus CS ini? Aksi ini tidak bisa dibatalkan.")) {
+    if (window.confirm("Are you sure you want to delete this CS? This action cannot be undone.")) {
       deleteCS(id);
     }
   };
@@ -44,9 +42,7 @@ function ManageCSPage() {
       </div>
 
       <div className={styles.content}>
-        {loading ? (
-          <p>Memuat data...</p>
-        ) : (
+        {loading ? <p>Memuat data...</p> : (
           <table className={styles.table}>
             <thead>
               <tr>
@@ -58,7 +54,19 @@ function ManageCSPage() {
               {customerServices.length > 0 ? (
                 customerServices.map(cs => (
                   <tr key={cs.id}>
-                    <td>{cs.name}</td>
+                    <td>
+                      <div className={styles.userCell}>
+                        <img 
+                          src={`https://ui-avatars.com/api/?name=${cs.name.replace(/\s/g, '+')}&background=random`} 
+                          alt={cs.name} 
+                          className={styles.avatar} 
+                        />
+                        <div>
+                          <div className={styles.userName}>{cs.name}</div>
+                          <div className={styles.userEmail}>{cs.email}</div>
+                        </div>
+                      </div>
+                    </td>
                     <td className={styles.actions}>
                       <button onClick={() => handleOpenModal(cs)} className={styles.editButton}>Edit</button>
                       <button onClick={() => handleDelete(cs.id)} className={styles.deleteButton}>Hapus</button>
@@ -66,16 +74,13 @@ function ManageCSPage() {
                   </tr>
                 ))
               ) : (
-                <tr>
-                  <td colSpan="2" style={{ textAlign: 'center' }}>Belum ada data CS.</td>
-                </tr>
+                <tr><td colSpan="2" style={{ textAlign: 'center' }}>Belum ada data CS.</td></tr>
               )}
             </tbody>
           </table>
         )}
       </div>
 
-      {/* Komponen Form Modal */}
       <CSForm
         isOpen={isModalOpen}
         onClose={handleCloseModal}

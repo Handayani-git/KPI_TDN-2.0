@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getDashboardDataForPeriod } from '../../services/kpiService';
+import { getDashboardDataForPeriod } from '../../services/managerService';
+import { useData } from '../../contexts/DataContext';
 
 import Card from '../../components/ui/Card/Card';
 import Table from '../../components/ui/Table/Table';
 import DateRangePickerComponent from '../../components/specific/DateRangePicker/DateRangePicker';
-import LineChart from '../../components/ui/Chart/LineChart';
+import BarChart from '../../components/ui/Chart/LineChart'; // Menggunakan BarChart
 import styles from './ManagerDashboardPage.module.css';
 
 function ManagerDashboardPage() {
+  const { customerServices } = useData();
   const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
   const [isAllTime, setIsAllTime] = useState(true);
+  const [selectedCS, setSelectedCS] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,12 +22,12 @@ function ManagerDashboardPage() {
       setLoading(true);
       const startDate = isAllTime ? null : dateRange.startDate;
       const endDate = isAllTime ? null : dateRange.endDate;
-      const result = await getDashboardDataForPeriod(startDate, endDate);
+      const result = await getDashboardDataForPeriod(startDate, endDate, selectedCS);
       setData(result);
       setLoading(false);
     };
     fetchData();
-  }, [dateRange, isAllTime]);
+  }, [dateRange, isAllTime, selectedCS]);
 
   const handleDateChange = (newDateRange) => {
     setDateRange(newDateRange);
@@ -72,8 +76,6 @@ function ManagerDashboardPage() {
     { Header: 'Closing', accessor: 'closing' },
   ], []);
 
-  // --- BAGIAN YANG DIPERBAIKI ---
-  // The loading check is now the very first thing in the return statement.
   if (loading || !data) {
     return (
         <div>
@@ -85,9 +87,17 @@ function ManagerDashboardPage() {
     );
   }
 
+  const filteredAdvData = data.current.advertiserPerformance.filter(adv =>
+    adv.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredCSData = data.current.csPerformance.filter(cs =>
+    cs.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const formattedHistoryData = data.current.dailyHistory.map(row => ({
     ...row,
-    date: new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(row.date) // 'row.date' is already a Date object
+    date: new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(row.date)
   }));
 
   return (
@@ -95,6 +105,16 @@ function ManagerDashboardPage() {
       <div className={styles.pageHeader}>
         <h1 className={styles.headerTitle}>Dashboard Manager</h1>
         <div className={styles.filterContainer}>
+          <select 
+            value={selectedCS} 
+            onChange={(e) => setSelectedCS(e.target.value)} 
+            className={styles.selectFilter}
+          >
+            <option value="all">Semua CS</option>
+            {customerServices.map(cs => (
+              <option key={cs.id} value={cs.id}>{cs.name}</option>
+            ))}
+          </select>
           <button 
             onClick={() => setIsAllTime(true)} 
             className={`${styles.button} ${isAllTime ? styles.activeButton : ''}`}
@@ -113,29 +133,40 @@ function ManagerDashboardPage() {
       </div>
 
       <div className={styles.chartSection}>
-        <LineChart chartData={data.current.chartData} title="Tren Omset Harian" />
+        <BarChart chartData={data.current.chartData} title="Perbandingan Omset vs. Budget Harian" />
       </div>
 
       <div className={styles.tableSection}>
         <div className={styles.tableHeader}>
           <h2 className={styles.tableTitle}>Ringkasan Kinerja (Agregat)</h2>
-          <span className={styles.dateSubtitle}>
-            {isAllTime 
-              ? "Menampilkan Semua Data" 
-              : `${formatDate(dateRange.startDate)} - ${formatDate(dateRange.endDate)}`
-            }
-          </span>
+          <div className={styles.searchContainer}>
+            <input
+              type="text"
+              placeholder="Cari ADV atau CS..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+          </div>
         </div>
         
         <h3 className={styles.subTableTitle}>Performa Advertiser</h3>
-        <Table columns={aggregateAdvColumns} data={data.current.advertiserPerformance} />
+        <Table columns={aggregateAdvColumns} data={filteredAdvData} />
 
         <h3 className={styles.subTableTitle} style={{ marginTop: '2rem' }}>Performa Tim CS</h3>
-        <Table columns={aggregateCSColumns} data={data.current.csPerformance} />
+        <Table columns={aggregateCSColumns} data={filteredCSData} />
       </div>
 
       <div className={styles.tableSection}>
-        <h2 className={styles.tableTitle}>Rincian Kinerja Harian</h2>
+        <div className={styles.tableHeader}>
+            <h2 className={styles.tableTitle}>Rincian Kinerja Harian</h2>
+            <span className={styles.dateSubtitle}>
+                {isAllTime 
+                ? "Menampilkan Semua Data" 
+                : `${formatDate(dateRange.startDate)} - ${formatDate(dateRange.endDate)}`
+                }
+            </span>
+        </div>
         <Table columns={dailyHistoryColumns} data={formattedHistoryData} />
       </div>
     </div>

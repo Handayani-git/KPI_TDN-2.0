@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import styles from './LoginPage.module.css'; // <-- Pastikan impor ini benar
+import logo from '../../images/logo.png'; // <-- Pastikan logo ada di path ini
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -46,6 +47,7 @@ const handleSubmit = async (event) => { // <-- Jadikan async
     <div className={styles.container}>
       <div className={styles.loginCard}>
         <div className={styles.header}>
+          <img src={logo} alt="Company Logo" className={styles.logo} />
           <h2>KPI Dashboard</h2>
           <p>Silakan masuk untuk melanjutkan</p>
         </div>

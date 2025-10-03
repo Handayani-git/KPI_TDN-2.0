@@ -1,12 +1,122 @@
-.pageHeader { margin-bottom: 2rem; }
-.headerTitle { font-size: 1.875rem; font-weight: 700; color: #374151; }
-.formContainer { background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px; }
-.formGroup { margin-bottom: 1.5rem; }
-.formGroup label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: #374151; }
-.input { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; }
-.input:disabled { background-color: #f3f4f6; cursor: not-allowed; }
-.submitButton { padding: 0.75rem 1.5rem; font-size: 1rem; color: white; background-color: var(--color-primary); border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; }
-.submitButton:hover { background-color: var(--color-primary-light); }
-.submitButton:disabled { background-color: #f9a885; cursor: not-allowed; }
-.successMessage { padding: 1rem; background-color: #d1fae5; color: #065f46; border-radius: 6px; margin-bottom: 1.5rem; }
-.errorMessage { padding: 1rem; background-color: #fee2e2; color: #991b1b; border-radius: 6px; margin-bottom: 1.5rem; }
+.pageLayout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.formSection {
+  flex: 1;
+  max-width: 450px;
+}
+
+.pageHeader {
+  margin-bottom: 2rem;
+}
+
+.headerTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.formContainer {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: white;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: var(--color-primary-light);
+}
+
+.submitButton:disabled {
+  background-color: #f9a885;
+  cursor: not-allowed;
+}
+
+.successMessage, .errorMessage {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.successMessage {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.errorMessage {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* --- Styles untuk Kolom Kanan --- */
+.historySection {
+  flex: 1.5;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.historyTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.deleteButton {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  transition: background-color 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: #fecaca;
+}
