@@ -5,7 +5,7 @@ import { useData } from '../../contexts/DataContext';
 import Card from '../../components/ui/Card/Card';
 import Table from '../../components/ui/Table/Table';
 import DateRangePickerComponent from '../../components/specific/DateRangePicker/DateRangePicker';
-import BarChart from '../../components/ui/Chart/LineChart'; // Menggunakan BarChart
+import BarChart from '../../components/ui/Chart/BarChart'; // Menggunakan BarChart
 import styles from './ManagerDashboardPage.module.css';
 
 function ManagerDashboardPage() {
@@ -23,7 +23,33 @@ function ManagerDashboardPage() {
       const startDate = isAllTime ? null : dateRange.startDate;
       const endDate = isAllTime ? null : dateRange.endDate;
       const result = await getDashboardDataForPeriod(startDate, endDate, selectedCS);
-      setData(result);
+      if (result && result.current && result.current.chartData) {
+        // Asumsi result.current.chartData memiliki struktur { labels: [], datasets: [{ label: 'Omset Harian', data: [] }, { label: 'Budget Harian', data: [] }] }
+        const updatedChartData = {
+          labels: result.current.chartData.labels,
+          datasets: result.current.chartData.datasets.map(dataset => {
+            if (dataset.label === 'Omset Harian') {
+              return {
+                ...dataset,
+                backgroundColor: 'rgba(255, 127, 80, 0.8)', // Warna primer Anda
+                borderColor: 'rgba(255, 127, 80, 1)',
+                borderWidth: 1,
+              };
+            } else if (dataset.label === 'Budget Harian') {
+              return {
+                ...dataset,
+                backgroundColor: 'rgba(107, 114, 128, 0.8)', // Warna abu-abu yang lebih gelap
+                borderColor: 'rgba(107, 114, 128, 1)',
+                borderWidth: 1,
+              };
+            }
+            return dataset; // Jika ada dataset lain, biarkan apa adanya
+          }),
+        };
+        setData({ ...result, current: { ...result.current, chartData: updatedChartData } });
+      } else {
+        setData(result); // Jika tidak ada data chart, set saja hasilnya
+      }
       setLoading(false);
     };
     fetchData();

@@ -1,49 +1,47 @@
+// File: BarChart.js
+// TIDAK PERLU ADA PERUBAHAN DI SINI
+
 import React from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-
+  BarElement,
   Title,
   Tooltip,
   Legend,
-  LineElement,
 } from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
 );
 
-function LineChart({ chartData, title }) {
-  const hasOmsetData = chartData && chartData.datasets && chartData.datasets[0] && chartData.datasets[0].data.length > 0;
+function BarChart({ chartData, title }) {
+const hasOmsetData = chartData && chartData.datasets && chartData.datasets[0] && chartData.datasets[0].data.length > 0;
   const hasBudgetData = chartData && chartData.datasets && chartData.datasets[1] && chartData.datasets[1].data.length > 0;
-
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    interaction: {
-        mode: 'index',
-        intersect: false,
-    },
     plugins: {
-      legend: { position: 'top' },
+      legend: {
+        position: 'top',
+      },
       title: {
         display: true,
         text: title,
         font: { size: 18, weight: 'bold' },
-        padding: { top: 10, bottom: 20 }
+        padding: { top: 10, bottom: 20 },
+        
       },
     },
     scales: {
-        y: { 
+       y: { 
             type: 'linear',
             display: true,
             position: 'left',
@@ -74,14 +72,13 @@ function LineChart({ chartData, title }) {
                 }
             }
         }
-    }
+    },
   };
-
-  if (!hasOmsetData && !hasBudgetData) {
+   if (!hasOmsetData && !hasBudgetData) {
     return <div style={{textAlign: 'center', color: '#888', marginTop: '50px'}}>Tidak ada data untuk ditampilkan pada rentang ini.</div>;
   }
 
-  return <Line options={options} data={chartData} />;
+  return <Bar options={options} data={chartData} />;
 }
 
-export default LineChart;
+export default BarChart;
