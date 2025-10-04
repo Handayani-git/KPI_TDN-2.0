@@ -213,7 +213,12 @@ A guide to run this project in a local environment.
             -   `quantity` (number): The number of items sold in the transaction.
             -   `omset` (number): The total revenue from the transaction.
 
-7.  **Run the application:**
+7.  **Run seed for add some data into database
+   ```bash
+   node seed.js
+   ``` 
+  
+9.  **Run the application:**
     ```bash
     npm start
     ```
