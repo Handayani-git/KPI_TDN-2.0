@@ -7,13 +7,8 @@ import { getFirestore } from "firebase/firestore"; // <-- Tambahkan import ini
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCnjKYSHGYpNA1nyTJCfm-HCVFsBeV5mIU", // Sebaiknya ganti dengan kunci asli Anda
-  authDomain: "kpi-429cf.firebaseapp.com",
-  projectId: "kpi-429cf",
-  storageBucket: "kpi-429cf.appspot.com", // Perbaiki .firebasestorage menjadi .appspot
-  messagingSenderId: "252385462360",
-  appId: "1:252385462360:web:b7d6810b0b1df8ad8b222d",
-  measurementId: "G-G4P6K7NSNC"
+  apiKey: "", // Sebaiknya ganti dengan kunci asli Anda
+  authDomain: "",
 };
 
 // Initialize Firebase
