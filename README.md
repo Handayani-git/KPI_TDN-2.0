@@ -2,6 +2,15 @@
   <img src="https://github.com/Ikbal-hand/KPI_TDN/blob/main/frontend/src/images/logo.png" />
 </p>
 
+<div align="center">
+
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![CSS Modules](https://img.shields.io/badge/CSS%20Modules-000000?style=for-the-badge&logo=css-modules&logoColor=white)](https://github.com/css-modules/css-modules)
+
+</div>
+
 # 📊 KPI Dashboard for TDN (Tasik Digital Native)
 
 An internal, full-stack serverless web application built to monitor, report, and analyze Key Performance Indicators (KPIs) for the marketing and sales teams at **TDN (Tasik Digital Native)**. Built with React and Firebase.
@@ -134,7 +143,7 @@ A guide to run this project in a local environment.
 
 2.  **Navigate to the project directory:**
     ```bash
-    cd KPI-TDN
+    cd KPI_TDN
     ```
 4.  **Dive to frontend folder:**
     ```bash
@@ -160,10 +169,9 @@ A guide to run this project in a local environment.
 5.  **Setup Firestore Collections:**
     Before running the application, you need to create the necessary collections and a few documents in your Firestore database.
 
-    ### ERD DIARGAM
-
+    #### ERD Diagram
+      ![alt text](https://github.com/Ikbal-hand/KPI_TDN/blob/main/frontend/src/images/ERD.png)
     
-
     #### Master Data
     -   **`advertisers`**:
         -   Stores the list of advertisers.
