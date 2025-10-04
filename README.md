@@ -66,6 +66,55 @@ Here are some views of the TDN KPI Dashboard application:
 ```
 
 ---
+## ⚙️ Application Data Flow & Metric Calculation
+
+This application transforms daily operational inputs into a real-time analytical dashboard for managers. Here is how the data flows through the system:
+
+### 1. Data Input (Daily Reporting)
+The process begins with the operational teams inputting their daily performance metrics through dedicated forms.
+
+-   **Advertiser (ADV) Input**: An ADV user logs in, navigates to the "Lapor Kinerja Iklan" page, and submits a report containing the `date`, `advertiserId`, `platform`, `product`, and `spend`. This action creates a new document in the **`adSpends`** collection in Firestore.
+
+-   **Customer Service (CS) Input**: A CS user logs in and uses two separate forms:
+    1.  **"Lapor Leads"**: They submit a report with the `date`, `csId`, `sourceAdvertiserId`, `product`, `sourcePlatform`, and `leadCount`. This creates a new document in the **`leads`** collection.
+    2.  **"Lapor Penjualan"**: For each sale, they submit a report with the `date`, `csId`, `advertiserId`, `product`, `quantity`, and `omset`. This creates a new document in the **`sales`** collection.
+
+### 2. Data Processing (Backend Logic)
+Once the data is in Firestore, the application's service layer (`managerService.js`, etc.) handles the processing when a dashboard is loaded.
+
+-   **Data Fetching**: When the Manager loads their dashboard for a specific date range, the service queries and fetches all relevant documents from the `adSpends`, `leads`, and `sales` collections within that period.
+-   **In-Memory Aggregation**: The service then processes this raw data:
+    -   It `SUM`s all `spend` from `adSpends` by advertiser.
+    -   It `SUM`s all `omset`, `quantity`, and counts `closing` events (one per sale document) from `sales` by advertiser and by CS.
+    -   It `SUM`s all `leadCount` from `leads` by advertiser and by CS.
+
+### 3. Metric Calculation
+Using the aggregated data, the `kpiService.js` calculates the key performance metrics:
+
+-   **ROAS (Return on Ad Spend)**
+    -   **Question:** How much revenue is generated for every Rupiah spent on ads?
+    -   **Formula:** `Total Gross Omset / Total Budget Ads`
+    -   **Example:** Omset `Rp 20jt` / Budget `Rp 5jt` = **ROAS 4.0**.
+
+-   **CAC ADV (%) (Advertising Cost of Sales)**
+    -   **Question:** What percentage of gross revenue is spent on ad costs?
+    -   **Formula:** `(Total Budget Ads / Total Gross Omset) * 100%`
+    -   **Example:** `(Rp 5jt / Rp 20jt) * 100%` = **25%**.
+
+-   **Closing Rate**
+    -   **Question:** How effectively does a CS agent convert leads into sales?
+    -   **Formula:** `(Total Closing / Total Leads) * 100%`
+    -   **Example:** `30 Closings / 150 Leads * 100%` = **20%**.
+
+-   **Average Products per Transaction**
+    -   **Question:** On average, how many products are sold in a single transaction?
+    -   **Formula:** `Total Quantity / Total Closing`
+    -   **Example:** `45 Products / 30 Closings` = **1.5 Products/Transaction**.
+
+### 4. Data Visualization (Dashboard Display)
+The processed data is sent back to the React components to be displayed to the Manager in the form of KPI cards, charts, and summary tables. This workflow ensures that any new report submitted by the team immediately updates the analytical insights on the Manager's dashboard.
+
+---
 
 ## 🚀 Getting Started
 
@@ -102,7 +151,61 @@ A guide to run this project in a local environment.
     -   Enable **Authentication** (Email/Password) and **Firestore Database** (test mode).
     -   Copy your Firebase configuration and paste it into the `src/firebase.js` file.
 
-5.  **Run the application:**
+5.  **Configure Firebase Project:**
+    -   Create a new project in the [Firebase Console](https://console.firebase.google.com/).
+    -   In your project, enable **Authentication** (with the Email/Password provider) and **Cloud Firestore** (start in test mode).
+    -   Copy your Firebase configuration credentials.
+    -   Paste your credentials into the `src/firebase.js` file.
+
+5.  **Setup Firestore Collections:**
+    Before running the application, you need to create the necessary collections and a few documents in your Firestore database.
+
+    ### ERD DIARGAM
+
+    
+
+    #### Master Data
+    -   **`advertisers`**:
+        -   Stores the list of advertisers.
+        -   *Fields*: `name` (string), `email` (string), `photoURL` (string, optional).
+    -   **`customerServices`**:
+        -   Stores the list of Customer Service agents.
+        -   *Fields*: `name` (string), `email` (string), `photoURL` (string, optional).
+    -   **`users`**:
+        -   Links authenticated users to their roles and data.
+        -   The **Document ID** for each document must be the **User UID** from Firebase Authentication.
+        -   *Fields*: `role` (string: "manager", "cs", or "advertiser"), `email` (string), `advertiserId` or `csId` (string, optional).
+
+    #### Transactional Data
+    -   **`adSpends`**:
+        -   Stores daily ad spend reports submitted by the ADV team.
+        -   *Fields*:
+            -   `date` (timestamp): The date of the report.
+            -   `advertiserId` (string): The ID of the advertiser who submitted the report (linked to the `advertisers` collection).
+            -   `platform` (string): The ad platform used (e.g., "Meta", "TikTok").
+            -   `product` (string): The product being advertised.
+            -   `spend` (number): The total amount spent.
+    -   **`leads`**:
+        -   Stores daily lead reports submitted by the CS team.
+        -   *Fields*:
+            -   `date` (timestamp): The date the leads were received.
+            -   `csId` (string): The ID of the CS agent who received the leads (linked to `customerServices`).
+            -   `sourceAdvertiserId` (string): The ID of the advertiser whose campaign generated the leads.
+            -   `sourcePlatform` (string): The platform the leads came from.
+            -   `product` (string): The product the leads were for.
+            -   `leadCount` (number): The total number of leads.
+    -   **`sales`**:
+        -   Stores individual sales/closing reports submitted by the CS team.
+        -   *Fields*:
+            -   `date` (timestamp): The date of the sale.
+            -   `csId` (string): The ID of the CS agent who closed the sale.
+            -   `advertiserId` (string): The ID of the advertiser whose campaign is credited for the sale.
+            -   `product` (string): The name of the product sold.
+            -   `sku` (string): The SKU of the product sold.
+            -   `quantity` (number): The number of items sold in the transaction.
+            -   `omset` (number): The total revenue from the transaction.
+
+7.  **Run the application:**
     ```bash
     npm start
     ```
