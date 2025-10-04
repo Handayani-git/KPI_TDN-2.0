@@ -214,9 +214,9 @@ A guide to run this project in a local environment.
             -   `omset` (number): The total revenue from the transaction.
 
 7.  **Run seed for add some data into database
-   ```bash
-   node seed.js
-   ``` 
+     ```bash
+     node seed.js
+     ``` 
   
 9.  **Run the application:**
     ```bash
