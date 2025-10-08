@@ -4,17 +4,17 @@ const { faker } = require('@faker-js/faker');
 
 // --- 1. Your Firebase Configuration ---
 const firebaseConfig = {
-  apiKey: "AIzaSyCnjKYSHGYpNA1nyTJCfm-HCVFsBeV5mIU", // Sebaiknya ganti dengan kunci asli Anda
-  authDomain: "kpi-429cf.firebaseapp.com",
-  projectId: "kpi-429cf",
-  storageBucket: "kpi-429cf.appspot.com", // Perbaiki .firebasestorage menjadi .appspot
-  messagingSenderId: "252385462360",
-  appId: "1:252385462360:web:b7d6810b0b1df8ad8b222d",
-  measurementId: "G-G4P6K7NSNC"
+  apiKey: "AIzaSyBT9Zm4FCAIkgnvQxaMohLySavOrTogGz8",
+  authDomain: "kpi-tdn-71797.firebaseapp.com",
+  projectId: "kpi-tdn-71797",
+  storageBucket: "kpi-tdn-71797.firebasestorage.app",
+  messagingSenderId: "673491996903",
+  appId: "1:673491996903:web:3a3be1afa90de6ab369242",
+  measurementId: "G-6BFL0LD8H5"
 };
 // --- 2. Your Master Data IDs ---
-const advertiserIds = ["36RU8bVTZDZ9Z2KMXEOZ", "PeEPkAVxsu57ue1jbyVM", "Q2zGDTPlgS8I0EakksgJ"];
-const csIds = ["GD1eKU0p60wao8n8V7j", "OBFUwpGMARoz4Xo9GufG"];
+const advertiserIds = ["R0jqSJ65ec7y2jQkfyuF", "N4OJaJS8hmA1ZbzQOHSh"];
+const csIds = ["BflgVhD4iuKxUaySRHE", "CfcLiXU2kQnhjN80YKkX", "H4EEPeoVg8sZII7v8n5E", "aBXU0RZ22AVy8pSKlm0X", "qxLX5QMPcC2lzNqVeVIT"];
 const products = ["Vitameal", "Eyebost", "Vitameal Less Sugar"];
 const platforms = ["Meta", "TikTok", "Google Ads", "Meta Interaksi WA"];
 
